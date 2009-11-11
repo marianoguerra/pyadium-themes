@@ -1,5 +1,6 @@
 '''a module to handle themes'''
 import os
+import glob
 
 import Theme
 
@@ -56,12 +57,24 @@ class Themes(object):
     def list(self):
         '''return a list of all the available themes
         '''
-        pass
+        themes = []
 
-    def get(self, theme):
+        for path in self.paths:
+            themes += glob.glob(os.path.join(path, "*.AdiumMessageStyle")
+
+        return themes
+
+    def get(self, theme_path):
         '''return a Theme object instance
+        returs True, theme_instance if the validation was ok
+        False, reason if some validation failed
         '''
-        pass
+        status, message = self.validate(self, theme_path)
+
+        if not status:
+            return status, message
+
+        return True, Theme.Theme(theme_path)
 
     def validate(self, theme_path):
         '''validate a Theme directory structure
