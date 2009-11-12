@@ -3,6 +3,8 @@ import re
 import os
 import time
 
+import xml.sax.saxutils
+
 class Theme(object):
     '''a class that contains information of a adium theme
     '''
@@ -79,32 +81,40 @@ class Theme(object):
         return self.replace(template, msg)
 
     def replace(self, template, msg):
-        template = template.replace('%sender%', msg.alias)
-        template = template.replace('%senderScreenName%', msg.sender)
-        template = template.replace('%senderDisplayName%', msg.display_name)
-        template = template.replace('%userIconPath%', msg.image_path)
-        template = template.replace('%senderStatusIcon%', msg.status_path)
-        template = template.replace('%messageDirection%', msg.direction)
-        template = template.replace('%message%', msg.message)
-        template = template.replace('%time%', time.strftime(self.timefmt))
-        template = template.replace('%shortTime%', time.strftime("%H:%M"))
-        template = template.replace('%service%', msg.service)
-        template = template.replace('%messageClasses%', msg.classes)
-        template = template.replace('%status%', msg.status)
+        template = template.replace('%sender%', escape(msg.alias))
+        template = template.replace('%senderScreenName%', escape(msg.sender))
+        template = template.replace('%senderDisplayName%',
+            escape(msg.display_name))
+        template = template.replace('%userIconPath%', escape(msg.image_path))
+        template = template.replace('%senderStatusIcon%',
+            escape(msg.status_path))
+        template = template.replace('%messageDirection%',
+            escape(msg.direction))
+        template = template.replace('%message%', escape(msg.message))
+        template = template.replace('%time%',
+            escape(time.strftime(self.timefmt)))
+        template = template.replace('%shortTime%',
+            escape(time.strftime("%H:%M")))
+        template = template.replace('%service%', escape(msg.service))
+        template = template.replace('%messageClasses%', escape(msg.classes))
+        template = template.replace('%status%', escape(msg.status))
 
         return template.replace('\n', '')
 
     def replace_header_or_footer(self, template, source, target,
             target_display, source_img, target_img):
-        template = template.replace('%chatName%', target)
-        template = template.replace('%sourceName%', source)
-        template = template.replace('%destinationName%', target)
-        template = template.replace('%destinationDisplayName%', target_display)
-        template = template.replace('%incomingIconPath%', target_img)
-        template = template.replace('%outgoingIconPath%', source_img)
-        template = template.replace('%timeOpened%', time.strftime("%H:%M"))
+        template = template.replace('%chatName%', escape(target))
+        template = template.replace('%sourceName%',escape(source))
+        template = template.replace('%destinationName%',escape(target))
+        template = template.replace('%destinationDisplayName%',
+            escape(target_display))
+        template = template.replace('%incomingIconPath%', escape(target_img))
+        template = template.replace('%outgoingIconPath%', escape(source_img))
+        template = template.replace('%timeOpened%',
+            escape(time.strftime("%H:%M")))
         # TODO: use the format inside the {}
-        template = re.sub("%timeOpened{.*?}%", time.strftime("%H:%M"), template)
+        template = re.sub("%timeOpened{.*?}%", escape(time.strftime("%H:%M")),
+            template)
 
         return template
 
@@ -136,4 +146,22 @@ class Theme(object):
             return file(path).read()
 
         return None
+
+__dic = {
+    '\"'    :    '&quot;',
+    '\''    :    '&apos;'
+}
+
+__dic_inv = {
+    '&quot;'    :'\"',
+    '&apos;'    :'\''
+}
+
+def escape(string_):
+    '''replace the values on dic keys with the values'''
+    return xml.sax.saxutils.escape(string_, __dic)
+
+def unescape(string_):
+    '''replace the values on dic_inv keys with the values'''
+    return xml.sax.saxutils.unescape(string_, __dic_inv)
 

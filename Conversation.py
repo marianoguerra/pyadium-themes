@@ -16,6 +16,7 @@ class Conversation(gtk.Window):
         self.set_border_width(4)
 
         self.theme = theme
+        self.last_incoming = None
 
         vbox = gtk.VBox(homogeneous=False)
         vbox.set_spacing(4)
@@ -51,9 +52,19 @@ class Conversation(gtk.Window):
         '''add a message to the conversation'''
 
         if msg.incoming:
+            if self.last_incoming is None:
+                sel.last_incoming = False
+
+            msg.first = not self.last_incoming
             html = self.theme.format_incoming(msg)
+            self.last_incoming = True
         else:
+            if self.last_incoming is None:
+                self.last_incoming = True
+
+            msg.first = self.last_incoming
             html = self.theme.format_outgoing(msg)
+            self.last_incoming = False
 
         if msg.first:
             function = "appendMessage('" + html + "')"
