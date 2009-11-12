@@ -60,21 +60,21 @@ class Themes(object):
         themes = []
 
         for path in self.paths:
-            themes += glob.glob(os.path.join(path, "*.AdiumMessageStyle")
+            themes += glob.glob(os.path.join(path, "*.AdiumMessageStyle"))
 
         return themes
 
-    def get(self, theme_path):
+    def get(self, theme_path, timefmt="%H:%M"):
         '''return a Theme object instance
         returs True, theme_instance if the validation was ok
         False, reason if some validation failed
         '''
-        status, message = self.validate(self, theme_path)
+        status, message = self.validate(theme_path)
 
         if not status:
             return status, message
 
-        return True, Theme.Theme(theme_path)
+        return True, Theme.Theme(theme_path, timefmt)
 
     def validate(self, theme_path):
         '''validate a Theme directory structure
