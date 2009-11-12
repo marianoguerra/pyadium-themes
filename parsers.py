@@ -47,10 +47,18 @@ class Plist(object):
             self.info[self.current_key] = data
 
 if __name__ == '__main__':
-    import pprint
-    info = Plist(file('themes/renkoo.AdiumMessageStyle/Contents/Info.plist')).info
-    pprint.pprint(info)
-    info = Plist(file('themes/Modern Bubbling.AdiumMessageStyle/Contents/Info.plist')).info
-    pprint.pprint(info)
-    info = Plist(file('themes/renkooNaked.AdiumMessageStyle/Contents/Info.plist')).info
-    pprint.pprint(info)
+    def test():
+        '''test the module'''
+        import pprint
+        info = Plist(file(
+            'themes/renkoo.AdiumMessageStyle/Contents/Info.plist')).info
+        pprint.pprint(info)
+        info = Plist(file(
+            'themes/Modern Bubbling.AdiumMessageStyle/Contents/Info.plist')
+            ).info
+        pprint.pprint(info)
+        info = Plist(file(
+            'themes/renkooNaked.AdiumMessageStyle/Contents/Info.plist')).info
+        pprint.pprint(info)
+
+    test()

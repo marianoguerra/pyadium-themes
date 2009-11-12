@@ -1,5 +1,8 @@
+'''an example on how to use the library'''
+
 import os
 import gtk
+gtk.gdk.threads_init()
 import sys
 import webkit
 
@@ -9,7 +12,8 @@ import Message
 
 class Conversation(gtk.Window):
 
-    def __init__(self, theme, source, target, target_display, source_img, target_img):
+    def __init__(self, theme, source, target, target_display, source_img,
+            target_img):
         gtk.Window.__init__(self)
         self.set_title('adium themes')
         self.set_default_size(640, 480)
@@ -22,8 +26,10 @@ class Conversation(gtk.Window):
         vbox.set_spacing(4)
 
         self.view = webkit.WebView()
-        body = theme.get_body(source, target, target_display, source_img, target_img)
-        self.view.load_string(body, "text/html", "utf-8", "file://" + theme.path)
+        body = theme.get_body(source, target, target_display, source_img,
+                target_img)
+        self.view.load_string(body,
+                "text/html", "utf-8", "file://" + theme.path)
         scroll = gtk.ScrolledWindow()
         scroll.add(self.view)
         scroll.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
@@ -53,7 +59,7 @@ class Conversation(gtk.Window):
 
         if msg.incoming:
             if self.last_incoming is None:
-                sel.last_incoming = False
+                self.last_incoming = False
 
             msg.first = not self.last_incoming
             html = self.theme.format_incoming(msg)
@@ -78,8 +84,8 @@ class Account(gtk.VBox):
     '''a class that represents an account widget to chat
     '''
 
-    def __init__(self, callback, local, account, display_name, alias, image_path,
-            status_path, status, message):
+    def __init__(self, callback, local, account, display_name, alias,
+            image_path, status_path, status, message):
         gtk.VBox.__init__(self)
         self.local = local
         self.callback = callback

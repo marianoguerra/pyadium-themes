@@ -49,20 +49,20 @@ class Themes(object):
         '''
 
         if path not in self.paths and os.path.isdir(path):
-           self.paths.append(path)
-           return True
+            self.paths.append(path)
+            return True
 
         return False
 
     def list(self):
         '''return a list of all the available themes
         '''
-        themes = []
+        items = []
 
         for path in self.paths:
-            themes += glob.glob(os.path.join(path, "*.AdiumMessageStyle"))
+            items += glob.glob(os.path.join(path, "*.AdiumMessageStyle"))
 
-        return themes
+        return items
 
     def get(self, theme_path, timefmt="%H:%M"):
         '''return a Theme object instance
@@ -106,11 +106,16 @@ class Themes(object):
         return True, "ok"
 
 if __name__ == '__main__':
-    themes = get_instance()
-    print themes.validate("themes/renkoo.AdiumMessageStyle")
-    print themes.validate("themes/renkooNaked.AdiumMessageStyle")
-    print themes.validate("themes/Modern Bubbling.AdiumMessageStyle")
-    print themes.validate("invalid themes/renkoo.AdiumMessageStyle")
-    print themes.validate("invalid themes/renkooNaked.AdiumMessageStyle")
-    print themes.validate("invalid themes/Modern Bubbling.AdiumMessageStyle")
-    print themes.validate("invalid themes/nonexistent.AdiumMessageStyle")
+    def test():
+        '''test the module'''
+        themes = get_instance()
+        print themes.validate("themes/renkoo.AdiumMessageStyle")
+        print themes.validate("themes/renkooNaked.AdiumMessageStyle")
+        print themes.validate("themes/Modern Bubbling.AdiumMessageStyle")
+        print themes.validate("invalid themes/renkoo.AdiumMessageStyle")
+        print themes.validate("invalid themes/renkooNaked.AdiumMessageStyle")
+        print themes.validate(
+                "invalid themes/Modern Bubbling.AdiumMessageStyle")
+        print themes.validate("invalid themes/nonexistent.AdiumMessageStyle")
+
+    test()

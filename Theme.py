@@ -5,6 +5,8 @@ import time
 
 import xml.sax.saxutils
 
+import parsers
+
 class Theme(object):
     '''a class that contains information of a adium theme
     '''
@@ -14,25 +16,41 @@ class Theme(object):
 
         get information from the theme located in path
         '''
-        self.path = None
-        self.timefmt = timefmt
+        self.timefmt        = timefmt
+        self.path           = None
+        self.resources_path = None
+        self.incoming_path  = None
+        self.outgoing_path  = None
+        self.content        = None
+        self.incoming       = None
+        self.incoming_next  = None
+        self.outgoing       = None
+        self.outgoing_next  = None
+        self.info           = None
+
         self.load_information(path)
 
     def load_information(self, path):
         '''load the information of the theme on path
         '''
         self.path = path
+
+        info_file = file(os.path.join(path, 'Contents', 'Info.plist'))
+        self.info = parsers.Plist(info_file).info
+
         self.resources_path = os.path.join(path, 'Contents', 'Resources')
         self.incoming_path = os.path.join(self.resources_path, 'Incoming')
         self.outgoing_path = os.path.join(self.resources_path, 'Outgoing')
 
-        self.content = self.read_file(self.resources_path, 'Content.html')
+        self.content = read_file(self.resources_path, 'Content.html')
 
-        self.incoming = self.read_file(self.incoming_path, 'Content.html')
-        self.incoming_next = self.read_file(self.incoming_path, 'NextContent.html')
+        self.incoming = read_file(self.incoming_path, 'Content.html')
+        self.incoming_next = read_file(self.incoming_path,
+                'NextContent.html')
 
-        self.outgoing = self.read_file(self.outgoing_path, 'Content.html')
-        self.outgoing_next = self.read_file(self.outgoing_path, 'NextContent.html')
+        self.outgoing = read_file(self.outgoing_path, 'Content.html')
+        self.outgoing_next = read_file(self.outgoing_path,
+                'NextContent.html')
 
     def format_incoming(self, msg):
         '''return a string containing the template for the incoming message
@@ -81,6 +99,8 @@ class Theme(object):
         return self.replace(template, msg)
 
     def replace(self, template, msg):
+        '''replace the variables on template for the values on msg
+        '''
         template = template.replace('%sender%', escape(msg.alias))
         template = template.replace('%senderScreenName%', escape(msg.sender))
         template = template.replace('%senderDisplayName%',
@@ -103,9 +123,11 @@ class Theme(object):
 
     def replace_header_or_footer(self, template, source, target,
             target_display, source_img, target_img):
+        '''replace the variables on template for the parameters
+        '''
         template = template.replace('%chatName%', escape(target))
-        template = template.replace('%sourceName%',escape(source))
-        template = template.replace('%destinationName%',escape(target))
+        template = template.replace('%sourceName%', escape(source))
+        template = template.replace('%destinationName%', escape(target))
         template = template.replace('%destinationDisplayName%',
             escape(target_display))
         template = template.replace('%incomingIconPath%', escape(target_img))
@@ -121,31 +143,35 @@ class Theme(object):
     def get_body(self, source, target, target_display, source_img, target_img):
         '''return the template to put as html content
         '''
-        template = self.read_file("template.html")
+        template = read_file("template.html")
         css_path = "file://" + os.path.join(self.resources_path, "main.css")
         template = template.replace("%@", "file://" + self.path, 1)
         template = template.replace("%@", css_path, 1)
-        header = self.read_file(self.resources_path, 'Header.html') or ""
+        header = read_file(self.resources_path, 'Header.html') or ""
+
         if header:
             header = self.replace_header_or_footer(header, source, target,
                     target_display, source_img, target_img)
+
         template = template.replace("%@", header, 1)
-        footer = self.read_file(self.resources_path, 'Footer.html') or ""
+        footer = read_file(self.resources_path, 'Footer.html') or ""
+
         if footer:
             footer = self.replace_header_or_footer(header, source, target,
                     target_display, source_img, target_img)
+
         template = template.replace("%@", footer, 1)
 
         return template
 
-    def read_file(self, *args):
-        '''read file if exists and is readable, return None otherwise
-        '''
-        path = os.path.join(*args)
-        if os.access(path, os.R_OK):
-            return file(path).read()
+def read_file(*args):
+    '''read file if exists and is readable, return None otherwise
+    '''
+    path = os.path.join(*args)
+    if os.access(path, os.R_OK):
+        return file(path).read()
 
-        return None
+    return None
 
 __dic = {
     '\"'    :    '&quot;',
