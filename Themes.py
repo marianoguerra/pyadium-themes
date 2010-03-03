@@ -10,7 +10,7 @@ REQUIRED_FILES = [
         {'name': 'Contents', 'type': DIRECTORY, 'childs': [
             {'name': 'Info.plist', 'type': FILE},
             {'name': 'Resources', 'type': DIRECTORY, 'childs': [
-                {'name': 'main.css', 'type': FILE},
+                #{'name': 'main.css', 'type': FILE},
                 {'name': 'Status.html', 'type': FILE},
                 {'name': 'Incoming', 'type': DIRECTORY, 'childs': [
                     {'name': 'Content.html', 'type': FILE},

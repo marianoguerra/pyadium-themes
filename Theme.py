@@ -113,6 +113,7 @@ class Theme(object):
         template = template.replace('%message%', escape(msg.message))
         template = template.replace('%time%',
             escape(time.strftime(self.timefmt)))
+        template = re.sub("%time{(.*?)}%", replace_time, template)
         template = template.replace('%shortTime%',
             escape(time.strftime("%H:%M")))
         template = template.replace('%service%', escape(msg.service))
@@ -145,8 +146,20 @@ class Theme(object):
         '''
         template = read_file("template.html")
         css_path = "file://" + os.path.join(self.resources_path, "main.css")
-        template = template.replace("%@", "file://" + self.path, 1)
+        variant_name = self.info.get('DefaultVariant', None)
+        template = template.replace("%@", "file://" + self.resources_path + "/", 1)
         template = template.replace("%@", css_path, 1)
+
+        if variant_name is not None:
+            variant_css_path = "file://" + os.path.join(self.resources_path,
+                    "Variants", variant_name + ".css")
+            variant_tag = '<style id="mainStyle" type="text/css"' + \
+                'media="screen,print">	@import url( "' + variant_css_path + '" ); </style>'
+        else:
+            variant_tag = ""
+
+        template = template.replace("%@", variant_tag, 1)
+
         header = read_file(self.resources_path, 'Header.html') or ""
 
         if header:
@@ -157,7 +170,7 @@ class Theme(object):
         footer = read_file(self.resources_path, 'Footer.html') or ""
 
         if footer:
-            footer = self.replace_header_or_footer(header, source, target,
+            footer = self.replace_header_or_footer(footer, source, target,
                     target_display, source_img, target_img)
 
         template = template.replace("%@", footer, 1)
@@ -190,4 +203,8 @@ def escape(string_):
 def unescape(string_):
     '''replace the values on dic_inv keys with the values'''
     return xml.sax.saxutils.unescape(string_, __dic_inv)
+
+def replace_time(match):
+    '''replace the format of the time to it's value'''
+    return time.strftime(match.groups()[0])
 

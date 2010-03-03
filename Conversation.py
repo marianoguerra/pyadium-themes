@@ -38,13 +38,13 @@ class Conversation(gtk.Window):
         vbox.pack_start(scroll, True, True)
 
         in_text = Account(self.add_message, True, "marianoguerra@emesene.org",
-                "wariano", "Mariano Guerra", "../extras/user.png",
-                "../extras/online.png", "online", "LOL")
+                "wariano", "Mariano Guerra", "../../../../extras/user.png",
+                "../../../../extras/online.png", "online", "LOL")
         vbox.pack_start(gtk.Label("incoming"), False)
         vbox.pack_start(in_text, False)
 
         out_text = Account(self.add_message, False, "dx@emesene.org",
-                "dx", "XD", "../extras/user1.png", "../extras/busy.png",
+                "dx", "XD", "../../../../extras/user1.png", "../../../../extras/busy.png",
                 "busy", "w00t")
         vbox.pack_start(gtk.Label("outcoming"), False)
         vbox.pack_start(out_text, False)
@@ -158,13 +158,18 @@ class Account(gtk.VBox):
         self.callback(message)
 
 if __name__ == '__main__':
-    import random
     dir_path = os.path.dirname(os.path.abspath(__file__))
     themes_path = os.path.join(dir_path, "themes")
 
     themes = Themes.get_instance()
     themes.add_themes_path(themes_path)
-    path = themes.list()[0]
+
+    for (index, path) in enumerate(themes.list()):
+        print index, path
+
+    option = int(raw_input("option: "))
+    path = themes.list()[option]
+
     status, theme = themes.get(path)
 
     if not status:
@@ -173,7 +178,7 @@ if __name__ == '__main__':
 
     gtk.gdk.threads_init()
     conv = Conversation(theme, "wariano@emesene.org", "dx@emesene.org", "XD",
-        "../extras/user.png", "../extras/user1.png")
+        "../../../../extras/user.png", "../../../../extras/user1.png")
     conv.show()
 
     gtk.main()
