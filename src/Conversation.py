@@ -159,7 +159,7 @@ class Account(gtk.VBox):
 
 if __name__ == '__main__':
     dir_path = os.path.dirname(os.path.abspath(__file__))
-    themes_path = os.path.join(dir_path, "themes")
+    themes_path = os.path.join(dir_path, "../test/themes")
 
     themes = Themes.get_instance()
     themes.add_themes_path(themes_path)

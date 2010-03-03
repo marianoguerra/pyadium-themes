@@ -1,0 +1,298 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<base href="%@">
+	<script type="text/ecmascript" defer="defer">
+	
+		//Appending new content to the message view
+		function appendMessage(html) {
+			shouldScroll = nearBottom();
+		
+			//Remove any existing insertion point
+			insert = document.getElementById("insert");
+			if(insert) insert.parentNode.removeChild(insert);
+
+			//Append the new message to the bottom of our chat block
+			chat = document.getElementById("Chat");
+			range = document.createRange();
+			range.selectNode(chat);
+			documentFragment = range.createContextualFragment(html);
+			chat.appendChild(documentFragment);
+			
+			alignChat(shouldScroll);
+		}
+		function appendMessageNoScroll(html) {
+			//Remove any existing insertion point
+			insert = document.getElementById("insert");
+			if(insert) insert.parentNode.removeChild(insert);
+
+			//Append the new message to the bottom of our chat block
+			chat = document.getElementById("Chat");
+			range = document.createRange();
+			range.selectNode(chat);
+			documentFragment = range.createContextualFragment(html);
+			chat.appendChild(documentFragment);
+		}
+		function appendNextMessage(html){
+			shouldScroll = nearBottom();
+
+			//Locate the insertion point
+			insert = document.getElementById("insert");
+		
+			//make new node
+			range = document.createRange();
+			range.selectNode(insert.parentNode);
+			newNode = range.createContextualFragment(html);
+
+			//swap
+			insert.parentNode.replaceChild(newNode,insert);
+			
+			alignChat(shouldScroll);
+		}
+		function appendNextMessageNoScroll(html){
+			//Locate the insertion point
+			insert = document.getElementById("insert");
+		
+			//make new node
+			range = document.createRange();
+			range.selectNode(insert.parentNode);
+			newNode = range.createContextualFragment(html);
+
+			//swap
+			insert.parentNode.replaceChild(newNode,insert);
+		}
+		
+		//Auto-scroll to bottom.  Use nearBottom to determine if a scrollToBottom is desired.
+		function nearBottom() {
+			return ( document.body.scrollTop >= ( document.body.offsetHeight - ( window.innerHeight * 1.2 ) ) );
+		}
+		// Add a variable for smooth scrolling.
+		var intervall_scroll;
+		function scrollToBottom() {
+		
+			// This is the default snappy-scroll, commented out.
+			//document.body.scrollTop = document.body.offsetHeight;
+			
+			//And here's our new scrolling.
+			if ( intervall_scroll ) clearInterval( intervall_scroll );
+			intervall_scroll = setInterval( function() {
+				var target_scroll = (document.body.scrollHeight-window.innerHeight);
+				var scrolldiff = target_scroll - document.body.scrollTop;
+				if ( document.body.scrollTop != target_scroll ) {
+					var saved_scroll = document.body.scrollTop;
+					document.body.scrollTop += scrolldiff / 5 + ( scrolldiff >= 0 ? (scrolldiff != 0 ) : -1 );
+				 } else {
+				 	saved_scroll = -1;
+					clearInterval( intervall_scroll );
+				 }
+			} , 10 );
+		}
+
+		//Dynamically exchange the active stylesheet
+		function setStylesheet( id, url ) {
+			code = "<style id=\"" + id + "\" type=\"text/css\" media=\"screen,print\">";
+			if( url.length ) code += "@import url( \"" + url + "\" );";
+			code += "</style>";
+			range = document.createRange();
+			head = document.getElementsByTagName( "head" ).item(0);
+			range.selectNode( head );
+			documentFragment = range.createContextualFragment( code );
+			head.removeChild( document.getElementById( id ) );
+			head.appendChild( documentFragment );
+		}
+		
+		//Swap an image with its alt-tag text on click, or expand/unexpand an attached image
+		document.onclick = imageCheck;
+		function imageCheck() {		
+			node = event.target;
+			if(node.tagName == 'IMG' && !client.zoomImage(node) && node.alt) {
+				a = document.createElement('a');
+				a.setAttribute('onclick', 'imageSwap(this)');
+				a.setAttribute('src', node.getAttribute('src'));
+				a.className = node.className;
+				text = document.createTextNode(node.alt);
+				a.appendChild(text);
+				node.parentNode.replaceChild(a, node);
+			}
+		}
+
+		function imageSwap(node) {
+			shouldScroll = nearBottom();
+
+			//Swap the image/text
+			img = document.createElement('img');
+			img.setAttribute('src', node.getAttribute('src'));
+			img.setAttribute('alt', node.firstChild.nodeValue);
+			img.className = node.className;
+			node.parentNode.replaceChild(img, node);
+			
+			alignChat(shouldScroll);
+		}
+		
+		//Align our chat to the bottom of the window.  If true is passed, view will also be scrolled down
+		function alignChat(shouldScroll) {
+			var windowHeight = window.innerHeight;
+			
+			if (windowHeight > 0) {
+				var contentElement = document.getElementById('Chat');
+				var contentHeight = contentElement.offsetHeight;
+				if (windowHeight - contentHeight > 0) {
+					contentElement.style.position = 'relative';
+					
+					// We don't want it bottom-aligned ...
+					//contentElement.style.top = (windowHeight - contentHeight) + 'px';
+					
+					// ... we want it top-aligned!
+					contentElement.style.top = '0px';
+				} else {
+					contentElement.style.position = 'static';
+				}
+			}
+			
+			if (shouldScroll) scrollToBottom();
+		}
+		
+		function windowDidResize(){
+			alignChat(true/*nearBottom()*/); //nearBottom buggy with inactive tabs
+		}
+		
+		// Kill this because we add something better later.
+		//window.onresize = windowDidResize;
+			
+	/******************************************
+	***  Extra, unique javascript goodness  ***
+	*******************************************
+	
+	There are several small issues that this javascript solves. It's included in Template.html as this will mean it's always included - unlike Header.html, which is optional..
+	
+	(1). How to randomly select an incoming colour.
+	
+	This is accomplished with a function called on load, which checks to see if the "select random colour" stylesheet has been chosen, and if so writes a random link node to apply an incoming colour.
+	
+	(2). Snappy scrolling is preferred to "smooth" scrolling when resizing manually.
+	
+	Manual (window drag) resizing looks weird and sloppy when the window contents scrolls slowly. We make manual resizing call a different function which forces instant scrolling, but preserves the "smooth" style scrolling when messages are sent/received.
+	
+	(3). Long URLs don't wrap.
+	
+	The only way to make long urls break mid-word is to give its container a fixed width or maximum width. Due to various factors it is not possible to do this in static CSS as it makes the style behave suboptimally. This javascript adds a listener for resizing, and gives the appropriate container a max-width based on the window width, which updates in real time. So, long URLs can wrap without breaking the style.
+	
+	*/
+	
+	
+	// Global variables we'll use to refer to specific stylesheet declarations.
+	var theDiv;
+	
+	// Global variable which will store the window height from last time the window was resized; useful later!
+	var winHeight = window.innerHeight;
+	
+	// Add listeners to do stuff on load and on resize.
+	window.addEventListener("load",modifyStylesheets,false);
+	window.addEventListener("load",writeRandomColour,false);
+	window.addEventListener("resize",resizeElements,false);
+	window.addEventListener("resize",newResizeHandler,false);
+	
+	// This is a clone of the old, instant - non-smooth - scrolling function, condensed slightly. This means we don't have to use the smooth scrolling for manual resizing (it looks weird, and doesn't feel as snappy as instant scrolling).
+	function newResizeHandler()
+	{
+		var windowHeight = window.innerHeight;
+		if (windowHeight > 0) {
+			var contentElement = document.getElementById('Chat');
+			var contentHeight = contentElement.offsetHeight;
+			if (windowHeight - contentHeight > 0) {
+				contentElement.style.position = 'relative';
+				contentElement.style.top = '0px';
+			} else {
+				contentElement.style.position = 'static';
+			}
+		}
+		// If the window height jumps more than 5 pixels instantaneously, chances are it's due to the text entry area shrinking after a message is sent, rather than a manual resize event. So, we call the smooth scrolling function in that case, otherwise we jump straight to the bottom.
+		(windowHeight - winHeight > 5 ? scrollToBottom() : document.body.scrollTop = document.body.offsetHeight)
+		// Store the new height globally, for comparison next time the size changes.
+		winHeight = windowHeight;
+	}
+	
+	// If the user has selected to cycle colours, this function detects that - by matching the @import rule to the main.css stylesheet - and appends a random coloured stylesheet to the header.
+	function writeRandomColour()
+	{
+		if(document.styleSheets)
+		{
+			// By our template, the second stylesheet ("1") is the variant.
+			if(document.styleSheets[1].cssRules[0].cssText == '@import url("Variants/Incoming Shuffle.css") ;')
+			{
+				var CSSpages=new Array( 
+				'Variants/Incoming Aqua.css',
+				'Variants/Incoming Clear.css',
+				'Variants/Incoming Graphite.css', 
+				'Variants/Incoming Lemon.css', 
+				'Variants/Incoming Lime.css', 
+				'Variants/Incoming Orange.css', 
+				'Variants/Incoming Purple.css',
+				'Variants/Incoming Pink.css'
+				); 
+				var cssNode = document.createElement('link');
+				cssNode.type = 'text/css';
+				cssNode.rel = 'stylesheet';
+				cssNode.media = 'screen';
+				cssNode.href = CSSpages[Math.floor(Math.random()*(CSSpages.length))];
+				cssNode.id = 'addedStyle';
+				document.getElementsByTagName("head")[0].appendChild(cssNode);
+			}
+		}
+	}
+	
+	// This function stores references to some stylesheet declarations.
+	function modifyStylesheets ()
+	{
+		if(document.styleSheets)
+		{
+			// This should be the base stylesheet, according to the template.
+			var styleSheetToMutilate = document.styleSheets[0];
+			// Here we insert a rule at the end.
+			styleSheetToMutilate.insertRule (".msgIn, .msgOut {}", styleSheetToMutilate.cssRules.length);
+			// Now we loop through the stylesheet rules to get a reference to the rule we just added, and save it in the global variable we set up earlier. Note we don't break when we find it, we keep going to get the last reference just in case of duplicates.
+			var styleSheetRules = styleSheetToMutilate.cssRules;
+			for(var i = 0; i < styleSheetRules.length; i++)
+			{
+				if(styleSheetRules[i].selectorText == ".msgIn, .msgOut") theDiv = styleSheetRules[i].style;
+			}
+		// Now we gotta give those rules some computed values!
+		// Why are we doing this twice? As of the time of writing, Webkit gives us the wrong value first time through.
+		resizeElements();
+		resizeElements();
+		}
+	}
+	
+	// Amazingly, resizeElements() resizes some elements! Specifically, it applies a max-width to the rule reference we got earlier, which is based on the window width and is live-updating.
+	function resizeElements()
+	{
+		// Some maths to set element width based on the content width.
+		var theWidth = document.body.clientWidth;
+		// Take 95 because that's our margin.
+		theWidth = theWidth - 95;
+		// Apply it, adding "px" so it's a legal value.
+		theDiv.maxWidth = theWidth + "px";
+		return true;
+	}
+
+	</script>
+	
+	<!-- This style is shared by all variants. !-->
+	<style id="baseStyle" type="text/css" media="screen,print">	
+		%@  
+		*{ word-wrap:break-word; }
+		img.scaledToFitImage { height:auto; width:100%; }
+	</style>
+	
+	<!-- Although we call this mainStyle for legacy reasons, it's actually the variant style !-->
+	<style id="mainStyle" type="text/css" media="screen,print">@import url( "%@" );</style>
+
+</head>
+<body onload="alignChat(true);" style="==bodyBackground==">
+%@
+<div id="Chat">
+</div>
+%@
+</body>
+</html>

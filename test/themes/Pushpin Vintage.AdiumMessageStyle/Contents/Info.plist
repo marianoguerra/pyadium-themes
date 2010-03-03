@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>MessageViewVersion</key>
+	<integer>4</integer>
+	<key>CFBundleIdentifier</key>
+	<string>mathuaerknedam.Pushpin Vintage.style</string>
+	<key>CFBundleName</key>
+	<string>Pushpin Vintage</string>
+	<key>CFBundleGetInfoString</key>
+	<string>0.8.4</string>
+	<key>DefaultFontFamily</key>
+	<string>Lucida Handwriting</string>
+	<key>DefaultFontSize</key>
+	<integer>12</integer>
+	<key>DefaultVariant</key>
+	<string>Black Background</string>
+</dict>
+</plist>

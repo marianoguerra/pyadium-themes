@@ -1,0 +1,6 @@
+@import url(../styles/basestyle.css);
+
+body
+{
+	background: url(../images/background_black.png) bottom repeat;
+}

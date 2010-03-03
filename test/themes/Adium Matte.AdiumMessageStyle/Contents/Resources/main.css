@@ -1,0 +1,239 @@
+	body {
+		margin-top: 20px;
+		background-color: white;
+		color: black;
+		word-wrap: break-word !important;
+		margin-bottom: 0;
+		margin-top: 16px;
+		overflow-x: hidden;
+	}
+	.msgContainer, .msgContainerContext {
+		background: #8abefa url("images/TopLeft.png") top left no-repeat;
+		position: relative;
+		min-height: 15px;
+	}
+
+	.msgTopRight {
+		background: url("images/TopRight.png") top right no-repeat;
+		position: absolute;
+		z-index: 1;
+		top: 0px;
+		right: 0px;
+		width: 20px;
+		height: 13px;
+	}
+
+	.msgTop {
+		background: url("images/Top.png") top left repeat-x;
+		height: 13px;
+		margin: 0px 20px;
+	}
+
+	.msgLeft {
+		background: url("images/Left.png") top left repeat-y;
+		position: absolute;
+		z-index: 1;
+		top: 10px;
+		left: 5px;
+		bottom: 8px;
+		width: 11px;
+	}
+
+	.msg {
+		background-color: transparent;
+		position: relative;
+		z-index: 10;
+		padding: 1px 14px 0 24px;
+		top: -10px;
+		left: -5px;
+		word-wrap: break-word;
+	}
+		
+	.msgMiddle {
+		background: url("images/Middle.png") top left repeat;
+		position: absolute;
+		z-index: -1;
+		top: 8px;
+		left: 16px;
+		bottom: 5px;
+		right: 6px;
+	}
+
+	.msgRight {
+		background: url("images/Right.png") top right repeat-y;
+		position: absolute;
+		z-index: 1;
+		top: 10px;
+		right: -5px;
+		bottom: 8px;
+		width: 11px;
+	}
+
+	.msgBottom {
+		background: url("images/Bottom.png") bottom left repeat-x;
+		position: absolute;
+		z-index: 1;
+		left: 20px;
+		bottom: 5px;
+		height: 13px;
+		right: 20px;
+	}
+
+	.msgBottomRight, .msgBottomRightSpeaking {
+		background: url("images/BottomRight.png") bottom right no-repeat;
+		position: absolute;
+		z-index: 1;
+		bottom: 5px;
+		right: 0px;
+		width: 20px;
+		height: 13px;
+		//border: solid black 1px;
+	}
+
+	.msgBottomRightSpeaking {
+		background: url("images/BottomRightArrow.png") bottom right no-repeat;
+	}
+
+	.msgBottomLeft, .msgBottomLeftSpeaking {
+		background: url("images/BottomLeft.png") bottom left no-repeat;
+		position: absolute;
+		z-index: 1;
+		bottom: 5px;
+		left: 0px;
+		width: 20px;
+		height: 13px;
+		//border: solid black 1px;
+	}
+
+	.msgBottomLeftSpeaking {
+		background: url("images/BottomLeftArrow.png") bottom left no-repeat;
+	}
+
+	.msgBottomCheater {
+		background-color: white;
+		position: absolute;
+		bottom: 0px;
+		left: 0px;
+		right: 0px;
+		height: 5px;
+	}
+
+	.msgIn .buddy, .msgOut .buddy {
+		width: 32px;
+		height: 32px;
+		position: absolute;
+		bottom: 10px;
+	}
+
+    #inbuddyblocker {
+        z-index: 5;
+        width: 32px;
+        height: 32px;
+        position: absolute;
+        bottom: 10px;
+	}
+	
+    #outbuddyblocker {
+        z-index: 5;
+        width: 32px;
+        height: 32px;
+        position: absolute;
+        bottom: 10px;
+        right: 0px;
+	}
+	
+	.msgIn, .msgOut {
+		position: relative;
+		padding-bottom: 6px;
+		clear: both;
+	}
+
+	.msgIn {
+		float: left;
+		margin-right: 95px;
+		//border: solid black 1px;
+	}
+
+	.msgIn .buddy {
+		left: 0px;
+	}
+
+	.msgOut {
+		float: right;
+		margin-left: 95px;
+	}
+
+	.msgOut .buddy {
+		right: 0px;
+	}
+
+	.status_container {
+		position: relative;
+		clear: both;
+		text-align: center;
+		font-family: helvetica;
+		font-size: 11px;
+		color: #898989;
+		top: -1px;
+		padding-bottom: 9px;
+    }
+			
+	.status_container:first-child {
+		top: -9px;
+		padding-bottom: 1px;
+    }
+			
+	.status_container + .status_container {
+		top: -3px;
+		padding-bottom: 7px;
+    }
+			
+	.msgIn .msgContainerContext {
+		background-color: lightgray;
+		position: relative;
+		left: 35px;
+		color: #000000;
+	}
+
+	.msgOut .msgContainerContext {
+		background-color: lightgray;
+		position: relative;
+		right: 35px;
+		color: #000000;
+	}
+
+	.followUp {
+		margin-top: 3px;
+		border-top: solid rgba(0,0,0,0.2) 1px;
+		height: 1px;
+		background: rgba(255,255,255,0.2);
+		margin: 3px 2px 2px;
+	}
+
+	.msg img {
+		vertical-align: middle;
+		position: relative;
+		top: -1px;
+	}
+
+
+     .msgIn .msgContainer {
+    	position: relative;
+    	left: 35px;
+    	background-color: #8abefa;
+    }
+
+     .msgOut .msgContainer {
+        position: relative;
+        right: 35px;
+    }
+
+    .header {
+		position: relative;
+		top: -10px;
+		clear: both;
+		text-align: center;
+		font-family: helvetica;
+		font-size: 11px;
+		color: #898989;
+	}

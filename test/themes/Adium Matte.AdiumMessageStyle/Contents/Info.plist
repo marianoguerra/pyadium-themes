@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AllowTextColors</key>
+	<true/>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleGetInfoString</key>
+	<string>Adium Matte Message Style v2.2</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.adiumx.adiummatte.style</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>Adium Matte </string>
+	<key>CFBundlePackageType</key>
+	<string>AdIM</string>
+	<key>CFBundleShortVersionString</key>
+	<string>2.2</string>
+	<key>DefaultBackgroundColor</key>
+	<string>ffffff</string>
+	<key>DefaultFontFamily</key>
+	<string>Lucida Grande</string>
+	<key>DefaultFontSize</key>
+	<integer>12</integer>
+	<key>DefaultVariant</key>
+	<string>Incoming Shuffle</string>
+	<key>DisableCombineConsecutive</key>
+	<true/>
+	<key>DisableCustomBackground</key>
+	<true/>
+	<key>MessageViewVersion</key>
+	<integer>3</integer>
+	<key>ShowsUserIcons</key>
+	<true/>
+</dict>
+</plist>
