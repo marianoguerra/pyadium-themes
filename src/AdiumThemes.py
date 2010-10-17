@@ -2,7 +2,7 @@
 import os
 import glob
 
-import Theme
+import AdiumTheme
 
 DIRECTORY, FILE = range(2)
 
@@ -26,12 +26,12 @@ def get_instance():
     global __instance
 
     if __instance is None:
-        __instance = Themes()
+        __instance = AdiumThemes()
 
     return __instance
 
 
-class Themes(object):
+class AdiumThemes(object):
     '''a class to handle adium themes
     '''
 
@@ -74,7 +74,7 @@ class Themes(object):
         if not status:
             return status, message
 
-        return True, Theme.Theme(theme_path, timefmt)
+        return True, AdiumTheme.AdiumTheme(theme_path, timefmt)
 
     def validate(self, theme_path):
         '''validate a Theme directory structure
@@ -105,17 +105,3 @@ class Themes(object):
 
         return True, "ok"
 
-if __name__ == '__main__':
-    def test():
-        '''test the module'''
-        themes = get_instance()
-        print themes.validate("themes/renkoo.AdiumMessageStyle")
-        print themes.validate("themes/renkooNaked.AdiumMessageStyle")
-        print themes.validate("themes/Modern Bubbling.AdiumMessageStyle")
-        print themes.validate("invalid themes/renkoo.AdiumMessageStyle")
-        print themes.validate("invalid themes/renkooNaked.AdiumMessageStyle")
-        print themes.validate(
-                "invalid themes/Modern Bubbling.AdiumMessageStyle")
-        print themes.validate("invalid themes/nonexistent.AdiumMessageStyle")
-
-    test()

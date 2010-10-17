@@ -1,5 +1,6 @@
 '''a module that contains a class that represents a message
 '''
+import os
 
 class Message(object):
     '''a class that represents a message to be used by the adium themes
@@ -8,7 +9,9 @@ class Message(object):
     def __init__(self, incoming, first, sender, display_name, alias, image_path,
             status_path, message, status, service='MSN', classes='',
             direction='ltr'):
-        '''constructor, see http://trac.adium.im/wiki/CreatingMessageStyles for more information of the values
+        '''constructor, see
+        http://trac.adium.im/wiki/CreatingMessageStyles for more information
+        of the values
         '''
         self.incoming       = incoming
         self.first          = first
@@ -22,3 +25,4 @@ class Message(object):
         self.service        = service
         self.classes        = classes
         self.direction      = direction
+

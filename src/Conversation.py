@@ -6,8 +6,8 @@ gtk.gdk.threads_init()
 import sys
 import webkit
 
-import Theme
-import Themes
+import AdiumTheme
+import AdiumThemes
 import Message
 
 class Conversation(gtk.Window):
@@ -161,7 +161,7 @@ if __name__ == '__main__':
     dir_path = os.path.dirname(os.path.abspath(__file__))
     themes_path = os.path.join(dir_path, "../test/themes")
 
-    themes = Themes.get_instance()
+    themes = AdiumThemes.get_instance()
     themes.add_themes_path(themes_path)
 
     for (index, path) in enumerate(themes.list()):
